@@ -1,4 +1,4 @@
-# NITK Sports Infrastructure Booking Portal
+# NITK Sports Infrastructure Management System
 
 A web-based platform for booking sports equipment and courts at NITK, featuring real-time availability, role-based access, and a seamless user experience.
 
