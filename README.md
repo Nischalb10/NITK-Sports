@@ -34,13 +34,13 @@ A web-based platform for booking sports equipment and courts at NITK, featuring 
    cd <repo-name>
    ```
 
-2. **Install dependencies:**
+2. **Install dependencies in both folders:**
    ```bash
    npm install
    ```
 
 3. **Set up environment variables:**
-   - Create a `.env` file in the root directory:
+   - Create a `.env` file in the server directory:
      ```
      PORT=3000
      MONGODB_URI=mongodb://localhost:27017/nitk-sports
@@ -54,7 +54,7 @@ A web-based platform for booking sports equipment and courts at NITK, featuring 
    
 5. **Start the client folder:**
    ```bash
-   npm run dev
+   npm start
    ```
    The app will be available at localhost:3000 for client and localhost:5000 for server.
 
