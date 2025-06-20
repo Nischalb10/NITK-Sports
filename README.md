@@ -68,22 +68,6 @@ A web-based platform for booking sports equipment and courts at NITK, featuring 
 
 ---
 
-## Project Structure
-
-```
-src/
-  controllers/
-  models/
-  routes/
-  views/
-  services/
-  middleware/
-  config/
-  ...
-public/
-  ...
-```
-
 ---
 
 ## Implemented Features
