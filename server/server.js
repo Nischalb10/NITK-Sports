@@ -5,6 +5,7 @@ const dotenv = require('dotenv');
 const userRoutes = require('./routes/userRoutes');
 const equipmentRoutes = require('./routes/equipmentRoutes');
 const infrastructureRoutes = require('./routes/infrastructureRoutes');
+const testRoutes = require('./routes/test');
 
 // Load environment variables
 if(process.env.NODE_ENV !== "production"){
@@ -34,6 +35,7 @@ db.once("open",()=>{
 app.use('/api/users', userRoutes);
 app.use('/api/equipment', equipmentRoutes);
 app.use('/api/infrastructure', infrastructureRoutes);
+app.use('/api/test', testRoutes);
 
 // Default route
 app.get('/', (req, res) => {

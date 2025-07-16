@@ -132,7 +132,7 @@ const InfrastructureBookingScreen = () => {
 
   // Generate time slots based on operating hours
   const generateTimeSlots = () => {
-    if (!infrastructure) return [];
+    if (!infrastructure || !date) return [];
 
     const slots = [];
     const openTime = infrastructure.operatingHours.open;
@@ -141,6 +141,11 @@ const InfrastructureBookingScreen = () => {
     // Parse hours and minutes
     const [openHour, openMinute] = openTime.split(':').map(Number);
     const [closeHour, closeMinute] = closeTime.split(':').map(Number);
+
+    // Get current date and time
+    const now = new Date();
+    const selectedDateObj = new Date(date);
+    const isToday = selectedDateObj.toDateString() === now.toDateString();
 
     // Generate slots in 1-hour increments
     let currentHour = openHour;
@@ -151,25 +156,39 @@ const InfrastructureBookingScreen = () => {
       (currentHour === closeHour && currentMinute < closeMinute)
     ) {
       const nextHour = currentHour + 1;
-      const timeSlot = {
-        start: `${currentHour.toString().padStart(2, '0')}:${currentMinute
-          .toString()
-          .padStart(2, '0')}`,
-        end: `${nextHour.toString().padStart(2, '0')}:${currentMinute
-          .toString()
-          .padStart(2, '0')}`,
-      };
+      const slotStart = `${currentHour.toString().padStart(2, '0')}:${currentMinute
+        .toString()
+        .padStart(2, '0')}`;
+      const slotEnd = `${nextHour.toString().padStart(2, '0')}:${currentMinute
+        .toString()
+        .padStart(2, '0')}`;
 
       // Check if this slot is already booked
       const isBooked = existingBookings.some(
         (booking) =>
-          booking.startTime === timeSlot.start &&
-          booking.endTime === timeSlot.end &&
+          booking.startTime === slotStart &&
+          booking.endTime === slotEnd &&
           booking.status !== 'rejected' &&
           booking.status !== 'cancelled'
       );
 
-      slots.push({ ...timeSlot, isBooked });
+      // Only show slots in the future for today
+      let isFutureSlot = true;
+      if (isToday) {
+        const nowHour = now.getHours();
+        const nowMinute = now.getMinutes();
+        if (
+          currentHour < nowHour ||
+          (currentHour === nowHour && currentMinute <= nowMinute)
+        ) {
+          isFutureSlot = false;
+        }
+      }
+
+      // Only add slot if it's in the future (for today) or any slot for future dates
+      if ((isToday && isFutureSlot) || !isToday) {
+        slots.push({ start: slotStart, end: slotEnd, isBooked });
+      }
       currentHour++;
     }
 

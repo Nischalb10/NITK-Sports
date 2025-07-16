@@ -42,6 +42,38 @@ const EquipmentBookingScreen = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
+  // Helper to get available time slots for today and future dates
+  const getAvailableTimes = (dateType) => {
+    if (!equipment) return [];
+    // For demo, assume equipment is available 08:00 to 20:00 (or use equipment.operatingHours if available)
+    const openTime = '08:00';
+    const closeTime = '20:00';
+    const [openHour, openMinute] = openTime.split(':').map(Number);
+    const [closeHour, closeMinute] = closeTime.split(':').map(Number);
+    const times = [];
+    for (let hour = openHour; hour < closeHour; hour++) {
+      times.push(`${hour.toString().padStart(2, '0')}:00`);
+      times.push(`${hour.toString().padStart(2, '0')}:30`);
+    }
+    times.push(`${closeHour.toString().padStart(2, '0')}:00`);
+
+    // Filter for today
+    if ((dateType === 'start' && startDate) || (dateType === 'end' && endDate)) {
+      const selectedDate = new Date(dateType === 'start' ? startDate : endDate);
+      const now = new Date();
+      const isToday = selectedDate.toDateString() === now.toDateString();
+      if (isToday) {
+        const nowHour = now.getHours();
+        const nowMinute = now.getMinutes();
+        return times.filter((t) => {
+          const [h, m] = t.split(':').map(Number);
+          return h > nowHour || (h === nowHour && m > nowMinute);
+        });
+      }
+    }
+    return times;
+  };
+
   const submitHandler = async (e) => {
     e.preventDefault();
     setBookingLoading(true);
@@ -144,12 +176,10 @@ const EquipmentBookingScreen = () => {
                 <Col md={6}>
                   <Form.Group controlId="startTime" className="mb-3">
                     <Form.Label>Start Time</Form.Label>
-                    <Form.Control
-                      type="time"
-                      value={startTime}
-                      onChange={(e) => setStartTime(e.target.value)}
-                      required
-                    />
+                    <Form.Select value={startTime} onChange={(e) => setStartTime(e.target.value)} required>
+                      <option value="">Select Start Time</option>
+                      {getAvailableTimes('start').map((t) => <option key={t} value={t}>{t}</option>)}
+                    </Form.Select>
                   </Form.Group>
                 </Col>
               </Row>
@@ -169,12 +199,10 @@ const EquipmentBookingScreen = () => {
                 <Col md={6}>
                   <Form.Group controlId="endTime" className="mb-3">
                     <Form.Label>End Time</Form.Label>
-                    <Form.Control
-                      type="time"
-                      value={endTime}
-                      onChange={(e) => setEndTime(e.target.value)}
-                      required
-                    />
+                    <Form.Select value={endTime} onChange={(e) => setEndTime(e.target.value)} required>
+                      <option value="">Select End Time</option>
+                      {getAvailableTimes('end').map((t) => <option key={t} value={t}>{t}</option>)}
+                    </Form.Select>
                   </Form.Group>
                 </Col>
               </Row>

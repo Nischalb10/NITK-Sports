@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Row, Col, Card, Button, Form } from 'react-bootstrap';
+import { Grid, Card, CardContent, CardActions, Button, Typography, Box, TextField, Select, MenuItem, InputLabel, FormControl } from '@mui/material';
+import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
@@ -46,112 +47,116 @@ const InfrastructureScreen = () => {
   });
 
   return (
-    <>
-      <h1>Sports Infrastructure</h1>
+    <Box>
+      <motion.div initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}>
+        <Typography variant="h3" fontWeight={700} gutterBottom>Sports Infrastructure</Typography>
+      </motion.div>
       {loading ? (
         <Loader />
       ) : error ? (
         <Message variant="danger">{error}</Message>
       ) : (
         <>
-          <Row className="mb-4">
-            <Col md={4}>
-              <Form.Group controlId="search">
-                <Form.Control
-                  type="text"
-                  placeholder="Search infrastructure..."
+          <Grid container spacing={2} mb={3}>
+            <Grid item xs={12} md={4}>
+              <FormControl fullWidth>
+                <TextField
+                  label="Search infrastructure..."
+                  variant="outlined"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
-              </Form.Group>
-            </Col>
-            <Col md={4}>
-              <Form.Group controlId="locationFilter">
-                <Form.Select
+              </FormControl>
+            </Grid>
+            <Grid item xs={12} md={4}>
+              <FormControl fullWidth>
+                <InputLabel id="location-label">Location</InputLabel>
+                <Select
+                  labelId="location-label"
                   value={locationFilter}
+                  label="Location"
                   onChange={(e) => setLocationFilter(e.target.value)}
                 >
-                  <option value="">All Locations</option>
+                  <MenuItem value="">All Locations</MenuItem>
                   {locations.map((location) => (
-                    <option key={location} value={location}>
-                      {location}
-                    </option>
+                    <MenuItem key={location} value={location}>{location}</MenuItem>
                   ))}
-                </Form.Select>
-              </Form.Group>
-            </Col>
-            <Col md={4}>
-              <Form.Group controlId="availabilityFilter">
-                <Form.Select
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid item xs={12} md={4}>
+              <FormControl fullWidth>
+                <InputLabel id="availability-label">Availability</InputLabel>
+                <Select
+                  labelId="availability-label"
                   value={availabilityFilter}
+                  label="Availability"
                   onChange={(e) => setAvailabilityFilter(e.target.value)}
                 >
-                  <option value="">All Availability</option>
-                  <option value="available">Available</option>
-                  <option value="not available">Not Available</option>
-                  <option value="under maintenance">Under Maintenance</option>
-                </Form.Select>
-              </Form.Group>
-            </Col>
-          </Row>
+                  <MenuItem value="">All Availability</MenuItem>
+                  <MenuItem value="available">Available</MenuItem>
+                  <MenuItem value="not available">Not Available</MenuItem>
+                  <MenuItem value="under maintenance">Under Maintenance</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+          </Grid>
 
           {filteredInfrastructure.length === 0 ? (
             <Message>No infrastructure found</Message>
           ) : (
-            <Row>
-              {filteredInfrastructure.map((item) => (
-                <Col key={item._id} sm={12} md={6} lg={4} className="mb-4">
-                  <Card className="h-100">
-                    <Card.Body>
-                      <Card.Title>{item.name}</Card.Title>
-                      <Card.Subtitle className="mb-2 text-muted">
-                        {item.location}
-                      </Card.Subtitle>
-                      <Card.Text>
-                        <strong>Availability:</strong>{' '}
-                        <span
-                          className={
-                            item.availability === 'available'
-                              ? 'text-success'
-                              : item.availability === 'under maintenance'
-                              ? 'text-warning'
-                              : 'text-danger'
-                          }
-                        >
-                          {item.availability}
-                        </span>
-                        <br />
-                        <strong>Capacity:</strong> {item.capacity} people
-                        <br />
-                        <strong>Operating Hours:</strong> {item.operatingHours.open} -{' '}
-                        {item.operatingHours.close}
-                      </Card.Text>
-                      <Link to={`/infrastructure/${item._id}`}>
+            <Grid container spacing={3}>
+              {filteredInfrastructure.map((item, idx) => (
+                <Grid item key={item._id} xs={12} sm={6} md={4}>
+                  <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: idx * 0.05 }}>
+                    <Card className="h-100" sx={{ boxShadow: 6 }}>
+                      <CardContent>
+                        <Typography variant="h6" fontWeight={600}>{item.name}</Typography>
+                        <Typography variant="subtitle2" color="text.secondary" gutterBottom>{item.location}</Typography>
+                        <Typography variant="body2">
+                          <strong>Availability:</strong>{' '}
+                          <span
+                            style={{ color: item.availability === 'available' ? '#22c55e' : item.availability === 'under maintenance' ? '#eab308' : '#ef4444', fontWeight: 600 }}
+                          >
+                            {item.availability}
+                          </span>
+                          <br />
+                          <strong>Capacity:</strong> {item.capacity} people
+                          <br />
+                          <strong>Operating Hours:</strong> {item.operatingHours.open} - {item.operatingHours.close}
+                        </Typography>
+                      </CardContent>
+                      <CardActions>
                         <Button
-                          variant="primary"
-                          className="me-2"
+                          component={Link}
+                          to={`/infrastructure/${item._id}`}
+                          variant="contained"
+                          color="primary"
+                          size="small"
                           disabled={item.availability !== 'available'}
                         >
                           View Details
                         </Button>
-                      </Link>
-                      <Link to={`/infrastructure/${item._id}/book`}>
                         <Button
-                          variant="success"
+                          component={Link}
+                          to={`/infrastructure/${item._id}/book`}
+                          variant="contained"
+                          color="success"
+                          size="small"
                           disabled={item.availability !== 'available'}
                         >
                           Book Now
                         </Button>
-                      </Link>
-                    </Card.Body>
-                  </Card>
-                </Col>
+                      </CardActions>
+                    </Card>
+                  </motion.div>
+                </Grid>
               ))}
-            </Row>
+            </Grid>
           )}
         </>
       )}
-    </>
+    </Box>
   );
 };
 

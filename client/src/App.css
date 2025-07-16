@@ -1,3 +1,10 @@
+body {
+  background: linear-gradient(135deg, #e0e7ff 0%, #f0fdfa 100%);
+  min-height: 100vh;
+  font-family: 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+  scroll-behavior: smooth;
+}
+
 .App {
   text-align: center;
 }
@@ -40,6 +47,16 @@
 /* Main Styles */
 main {
   min-height: 80vh;
+  padding-bottom: 2rem;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  background: #e0e7ff;
+}
+::-webkit-scrollbar-thumb {
+  background: #a5b4fc;
+  border-radius: 4px;
 }
 
 /* Header Styles */
@@ -66,6 +83,14 @@ footer {
   transform: translateY(-5px);
 }
 
+.MuiCard-root {
+  border-radius: 18px;
+  transition: box-shadow 0.3s;
+}
+.MuiCard-root:hover {
+  box-shadow: 0 8px 32px 0 rgba(31, 41, 55, 0.18);
+}
+
 /* Form Styles */
 .form-control:focus {
   border-color: #343a40;
@@ -81,6 +106,16 @@ footer {
 .btn-primary:hover {
   background-color: #23272b;
   border-color: #23272b;
+}
+
+.MuiButton-containedPrimary {
+  background: linear-gradient(90deg, #6366f1 0%, #06b6d4 100%);
+  color: #fff;
+  font-weight: 600;
+  box-shadow: 0 2px 8px 0 rgba(99, 102, 241, 0.12);
+}
+.MuiButton-containedPrimary:hover {
+  background: linear-gradient(90deg, #06b6d4 0%, #6366f1 100%);
 }
 
 /* Table Styles */
@@ -113,6 +148,14 @@ footer {
   font-size: 2.5rem;
   font-weight: bold;
   margin: 1rem 0;
+}
+
+.MuiTypography-h2 {
+  background: linear-gradient(90deg, #6366f1 0%, #06b6d4 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-fill-color: transparent;
 }
 
 /* Booking Form Styles */

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
-import { Container } from 'react-bootstrap';
+import { Container as MUIContainer, Box } from '@mui/material';
+import { AnimatePresence, motion } from 'framer-motion';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import HomeScreen from './screens/HomeScreen';
@@ -47,93 +48,103 @@ function App() {
     <>
       <Header user={user} setUser={setUser} />
       <main className="py-3">
-        <Container>
-          <Routes>
-            <Route path="/" element={<HomeScreen />} />
-            <Route path="/login" element={<LoginScreen setUser={setUser} />} />
-            <Route path="/register" element={<RegisterScreen setUser={setUser} />} />
-            
-            {/* Protected Routes */}
-            <Route path="/profile" element={
-              <ProtectedRoute>
-                <ProfileScreen user={user} setUser={setUser} />
-              </ProtectedRoute>
-            } />
-            
-            <Route path="/equipment" element={
-              <ProtectedRoute>
-                <EquipmentScreen />
-              </ProtectedRoute>
-            } />
-            
-            <Route path="/equipment/:id" element={
-              <ProtectedRoute>
-                <EquipmentDetailScreen />
-              </ProtectedRoute>
-            } />
-            
-            <Route path="/equipment/:id/book" element={
-              <ProtectedRoute>
-                <EquipmentBookingScreen user={user} />
-              </ProtectedRoute>
-            } />
-            
-            <Route path="/infrastructure" element={
-              <ProtectedRoute>
-                <InfrastructureScreen />
-              </ProtectedRoute>
-            } />
-            
-            <Route path="/infrastructure/:id" element={
-              <ProtectedRoute>
-                <InfrastructureDetailScreen />
-              </ProtectedRoute>
-            } />
-            
-            <Route path="/infrastructure/:id/book" element={
-              <ProtectedRoute>
-                <InfrastructureBookingScreen user={user} />
-              </ProtectedRoute>
-            } />
-            
-            <Route path="/bookings" element={
-              <ProtectedRoute>
-                <UserBookingsScreen user={user} />
-              </ProtectedRoute>
-            } />
-            
-            {/* Admin Routes */}
-            <Route path="/admin" element={
-              <AdminRoute>
-                <AdminDashboardScreen />
-              </AdminRoute>
-            } />
-            
-            <Route path="/admin/equipment" element={
-              <AdminRoute>
-                <AdminEquipmentScreen />
-              </AdminRoute>
-            } />
-            
-            <Route path="/admin/infrastructure" element={
-              <AdminRoute>
-                <AdminInfrastructureScreen />
-              </AdminRoute>
-            } />
-            
-            <Route path="/admin/bookings" element={
-              <AdminRoute>
-                <AdminBookingsScreen />
-              </AdminRoute>
-            } />
-            
-            <Route path="/admin/users" element={
-              <AdminRoute>
-                <AdminUsersScreen />
-              </AdminRoute>
-            } />
-          </Routes>
-        </Container>
+        <MUIContainer maxWidth="lg">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={window.location.pathname}
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -40 }}
+              transition={{ duration: 0.5 }}
+            >
+              <Routes>
+                <Route path="/" element={<HomeScreen />} />
+                <Route path="/login" element={<LoginScreen setUser={setUser} />} />
+                <Route path="/register" element={<RegisterScreen setUser={setUser} />} />
+                
+                {/* Protected Routes */}
+                <Route path="/profile" element={
+                  <ProtectedRoute>
+                    <ProfileScreen user={user} setUser={setUser} />
+                  </ProtectedRoute>
+                } />
+                
+                <Route path="/equipment" element={
+                  <ProtectedRoute>
+                    <EquipmentScreen />
+                  </ProtectedRoute>
+                } />
+                
+                <Route path="/equipment/:id" element={
+                  <ProtectedRoute>
+                    <EquipmentDetailScreen />
+                  </ProtectedRoute>
+                } />
+                
+                <Route path="/equipment/:id/book" element={
+                  <ProtectedRoute>
+                    <EquipmentBookingScreen user={user} />
+                  </ProtectedRoute>
+                } />
+                
+                <Route path="/infrastructure" element={
+                  <ProtectedRoute>
+                    <InfrastructureScreen />
+                  </ProtectedRoute>
+                } />
+                
+                <Route path="/infrastructure/:id" element={
+                  <ProtectedRoute>
+                    <InfrastructureDetailScreen />
+                  </ProtectedRoute>
+                } />
+                
+                <Route path="/infrastructure/:id/book" element={
+                  <ProtectedRoute>
+                    <InfrastructureBookingScreen user={user} />
+                  </ProtectedRoute>
+                } />
+                
+                <Route path="/bookings" element={
+                  <ProtectedRoute>
+                    <UserBookingsScreen user={user} />
+                  </ProtectedRoute>
+                } />
+                
+                {/* Admin Routes */}
+                <Route path="/admin" element={
+                  <AdminRoute>
+                    <AdminDashboardScreen />
+                  </AdminRoute>
+                } />
+                
+                <Route path="/admin/equipment" element={
+                  <AdminRoute>
+                    <AdminEquipmentScreen />
+                  </AdminRoute>
+                } />
+                
+                <Route path="/admin/infrastructure" element={
+                  <AdminRoute>
+                    <AdminInfrastructureScreen />
+                  </AdminRoute>
+                } />
+                
+                <Route path="/admin/bookings" element={
+                  <AdminRoute>
+                    <AdminBookingsScreen />
+                  </AdminRoute>
+                } />
+                
+                <Route path="/admin/users" element={
+                  <AdminRoute>
+                    <AdminUsersScreen />
+                  </AdminRoute>
+                } />
+              </Routes>
+            </motion.div>
+          </AnimatePresence>
+        </MUIContainer>
       </main>
       <Footer />
     </>
